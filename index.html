@@ -8,21 +8,84 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #0a0a0a;
+      background: #000;
       color: #e0e0e0;
       height: 100vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
+
+    /* --- ANIMATED BLACK HOLE BACKGROUND --- */
+    #blackhole-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background: radial-gradient(circle at center, #050505 0%, #000000 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 800px;
+      overflow: hidden;
+    }
+    .accretion-disk {
+      position: absolute;
+      width: 90vmax;
+      height: 90vmax;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg, 
+        rgba(255, 100, 0, 0.1), 
+        rgba(255, 150, 0, 0.8), 
+        rgba(0, 200, 255, 0.9), 
+        rgba(255, 100, 0, 0.1)
+      );
+      filter: blur(40px);
+      transform: rotateX(65deg);
+      animation: spin-disk 15s linear infinite;
+    }
+    .photon-ring {
+      position: absolute;
+      width: 26vmax;
+      height: 26vmax;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: 0 0 50px 10px rgba(255, 200, 100, 0.8), inset 0 0 30px rgba(0, 200, 255, 0.6);
+      animation: pulse-ring 4s ease-in-out infinite alternate;
+      z-index: 1;
+    }
+    .event-horizon {
+      position: absolute;
+      width: 24vmax;
+      height: 24vmax;
+      background: #000;
+      border-radius: 50%;
+      box-shadow: inset 0 0 40px #000;
+      z-index: 2;
+    }
+    @keyframes spin-disk {
+      0% { transform: rotateX(65deg) rotateZ(0deg); }
+      100% { transform: rotateX(65deg) rotateZ(360deg); }
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.98); opacity: 0.8; }
+      100% { transform: scale(1.02); opacity: 1; }
+    }
+
+    /* --- UI OVERLAY (Glassmorphism) --- */
     header {
-      background: linear-gradient(135deg, #111, #222);
+      background: rgba(17, 17, 17, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       padding: 15px 20px;
-      border-bottom: 1px solid #444;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
       align-items: center;
       gap: 15px;
-      box-shadow: 0 4px 20px rgba(0, 255, 157, 0.2);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     }
     .logo {
       width: 42px;
@@ -46,6 +109,7 @@
       margin: 0;
       font-size: 1.7rem;
       letter-spacing: -0.5px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
     .subtitle {
       color: #00ff9d;
@@ -55,12 +119,18 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      text-shadow: 0 1px 5px rgba(0,0,0,0.8);
     }
     .subtitle::before {
       content: "●";
       color: #00ff9d;
       animation: blink 1.5s infinite;
     }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
     #chat-container {
       flex: 1;
       overflow-y: auto;
@@ -68,7 +138,8 @@
       display: flex;
       flex-direction: column;
       gap: 18px;
-      background: linear-gradient(#0a0a0a, #111);
+      /* Transparent so the blackhole shows through */
+      background: transparent;
     }
     .message {
       max-width: 82%;
@@ -76,25 +147,42 @@
       border-radius: 24px;
       line-height: 1.6;
       font-size: 1.08rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       position: relative;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .user {
       align-self: flex-end;
-      background: linear-gradient(135deg, #00b8ff, #0099dd);
+      background: linear-gradient(135deg, rgba(0, 184, 255, 0.8), rgba(0, 153, 221, 0.8));
       color: white;
       border-bottom-right-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
     }
     .ai {
       align-self: flex-start;
-      background: #1c1c1c;
-      border: 2px solid #333;
+      background: rgba(28, 28, 28, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-bottom-left-radius: 8px;
     }
+    
+    .knowledge-bar {
+      font-size: 0.85rem;
+      color: #00ff9d;
+      text-align: center;
+      padding: 8px;
+      background: rgba(17, 17, 17, 0.7);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+
     #input-area {
       padding: 20px 25px;
-      background: #111;
-      border-top: 2px solid #333;
+      background: rgba(17, 17, 17, 0.8);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
     }
     #input-form {
@@ -107,19 +195,20 @@
       flex: 1;
       padding: 20px 28px;
       border-radius: 9999px;
-      border: none;
-      background: #222;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(34, 34, 34, 0.6);
       color: white;
       font-size: 1.15rem;
       box-shadow: inset 0 3px 12px rgba(0,0,0,0.5);
     }
     #user-input:focus {
       outline: none;
-      box-shadow: 0 0 0 4px #00ff9d;
+      box-shadow: 0 0 0 2px #00ff9d, inset 0 3px 12px rgba(0,0,0,0.5);
+      background: rgba(34, 34, 34, 0.9);
     }
     button {
       padding: 0 36px;
-      background: linear-gradient(135deg, #00ff9d, #00dd88);
+      background: linear-gradient(135deg, #00ff9d, #00b8ff);
       color: #000;
       border: none;
       border-radius: 9999px;
@@ -127,108 +216,89 @@
       cursor: pointer;
       font-size: 1.15rem;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
     }
     button:hover {
-      transform: translateY(-3px) scale(1.08);
-      box-shadow: 0 10px 30px rgba(0,255,157,0.5);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 255, 157, 0.6);
     }
     .thinking {
       font-style: italic;
       color: #00ff9d;
       align-self: flex-start;
-      background: #1c1c1c;
+      background: rgba(28, 28, 28, 0.8);
       padding: 16px 24px;
       border-radius: 9999px;
-      border: 2px solid #333;
+      border: 1px solid rgba(255,255,255,0.1);
+      animation: pulse 1.5s infinite;
     }
-    .knowledge-bar {
-      font-size: 0.8rem;
-      color: #00ff9d;
-      text-align: center;
-      padding: 4px;
-      background: #111;
-      border-top: 1px solid #333;
-    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
   </style>
 </head>
 <body>
+
+  <div id="blackhole-bg">
+    <div class="accretion-disk"></div>
+    <div class="photon-ring"></div>
+    <div class="event-horizon"></div>
+  </div>
 
   <header>
     <div class="logo">G</div>
     <div>
       <h1>SuperSuper Grok AI</h1>
-      <span class="subtitle">xAI • REFINED ULTIMATE + AI ETHICS Edition • 2,000,000+ facts including full AI ethics</span>
+      <span class="subtitle">xAI • REFINED ULTIMATE + AI ETHICS Edition</span>
     </div>
   </header>
 
   <div id="chat-container"></div>
 
   <div class="knowledge-bar">
-    ✅ Knowledge base REFINED + AI ETHICS added: Bias, privacy, accountability, existential risk, transparency, EU AI Act, xAI philosophy &amp; more • Global mythology • Sports • Bollywood • World history • Daily life • Everything else
+    🌌 NEW: Animated Event Horizon Background Active • ✅ Ultimate AI Core Knowledge Loaded: LLMs, RAG, Transformers, RLHF, Embeddings & Ethics
   </div>
 
   <div id="input-area">
     <form id="input-form">
-      <input type="text" id="user-input" placeholder="Ask about AI ethics... or literally anything else" autocomplete="off">
+      <input type="text" id="user-input" placeholder="Ask about Transformers, LLMs, RAG, RLHF, or the universe..." autocomplete="off">
       <button type="submit">Send</button>
     </form>
   </div>
 
   <script>
-    // ====================== REFINED ULTIMATE KNOWLEDGE BASE + AI ETHICS ======================
-    // Every previous entry refined for clarity + brand-new dedicated AI Ethics section added.
+    // ====================== ULTIMATE AI KNOWLEDGE BASE ======================
+    // Expanded with the core concepts of modern Artificial Intelligence.
 
     const knowledgeBase = [
-      // === GLOBAL MYTHOLOGY (refined) ===
-      { keywords: ["zeus", "greek", "olympus", "thunder"], answer: "Zeus is the king of the Greek gods, ruler of the sky and thunder, living on Mount Olympus." },
-      { keywords: ["thor", "norse", "mjolnir"], answer: "Thor is the Norse god of thunder who wields the hammer Mjölnir." },
-      { keywords: ["ra", "egyptian", "sun"], answer: "Ra is the ancient Egyptian sun god who sails across the sky daily." },
-      { keywords: ["amaterasu", "japanese", "sun"], answer: "Amaterasu is the Japanese Shinto sun goddess and ancestor of the imperial family." },
-      { keywords: ["sun wukong", "monkey king"], answer: "Sun Wukong, the Monkey King, is a legendary Chinese trickster hero from Journey to the West." },
-      { keywords: ["ragnarok"], answer: "Ragnarok is the prophesied end-of-world battle in Norse mythology." },
+      // === CORE AI / MACHINE LEARNING ===
+      { keywords: ["llm", "large language model"], answer: "An LLM (Large Language Model) is an AI trained on vast amounts of text. It uses probability to predict the next word in a sequence, allowing it to generate human-like text, translate languages, and write code." },
+      { keywords: ["transformer", "attention is all you need"], answer: "Introduced by Google in 2017, the Transformer is the neural network architecture underlying modern LLMs. Its 'self-attention' mechanism allows it to weigh the importance of every word in a sentence simultaneously, rather than processing them one by one." },
+      { keywords: ["rag", "retrieval augmented generation"], answer: "RAG (Retrieval-Augmented Generation) connects an LLM to external databases. Instead of relying solely on its training data, the AI searches your private documents or the live internet, retrieves the exact facts, and uses them to write an accurate answer." },
+      { keywords: ["rlhf", "reinforcement learning"], answer: "RLHF (Reinforcement Learning from Human Feedback) is how raw AI models become polite and helpful chatbots. Humans rate the AI's responses, and the AI updates its internal reward system to favor answers humans prefer." },
+      { keywords: ["embedding", "vector", "vector database"], answer: "Embeddings turn words and concepts into arrays of numbers (vectors). If 'dog' is [1.2, 0.4] and 'puppy' is [1.1, 0.5], a Vector Database knows they are related because their numbers are close together in high-dimensional space." },
+      { keywords: ["token", "tokenization"], answer: "AI doesn't read words; it reads tokens. A token can be a word, part of a word, or a single character. For example, 'hamburger' might be split into 'ham', 'bur', and 'ger'. 100 tokens is roughly 75 words." },
+      { keywords: ["context window"], answer: "The context window is the model's short-term memory. It dictates how much text you can feed the AI at once. If an AI has a 128,000 token window, you can upload an entire 300-page book for it to analyze in one go." },
+      { keywords: ["parameter", "weights"], answer: "Parameters are the 'synapses' of an AI brain. They are the millions or billions of mathematical weights the model learns during training. When an AI is called a '70B model', it means it has 70 billion parameters." },
+      { keywords: ["hallucination"], answer: "An AI hallucination occurs when a model generates false, nonsensical, or unverified information but presents it confidently as fact. This happens because LLMs are predicting plausible-sounding text, not querying a database of absolute truths." },
+      { keywords: ["diffusion model", "midjourney", "dall-e", "image generation"], answer: "Diffusion models generate images by taking a canvas of pure TV static (noise) and slowly refining it, step-by-step, until it forms an image that matches your text prompt." },
+      { keywords: ["moe", "mixture of experts"], answer: "MoE (Mixture of Experts) is an architecture where an AI consists of many smaller sub-models ('experts'). For any given prompt, a 'router' sends the query only to the relevant experts, making the AI faster and cheaper to run without losing capability." },
+      { keywords: ["agi", "artificial general intelligence"], answer: "AGI refers to a theoretical future AI that can understand, learn, and apply knowledge across any intellectual task at a level equal to or better than a human being." },
+      { keywords: ["prompt engineering"], answer: "Prompt engineering is the skill of structuring text instructions so perfectly that you constrain the AI to give you the exact output format, tone, and logic you desire." },
 
-      // === GLOBAL SPORTS (refined) ===
-      { keywords: ["fifa", "world cup"], answer: "The FIFA World Cup is the most-watched sporting event on Earth, held every 4 years." },
-      { keywords: ["nba", "basketball"], answer: "The NBA is the world’s top professional basketball league." },
-      { keywords: ["olympics"], answer: "The modern Olympics began in 1896; ancient Games started in Greece in 776 BC." },
-      { keywords: ["ipl"], answer: "The Indian Premier League is the world’s richest T20 cricket league." },
-
-      // === BOLLYWOOD (refined) ===
-      { keywords: ["shah rukh khan", "srk", "ddlj"], answer: "Shah Rukh Khan is Bollywood’s King Khan. DDLJ has run in theaters for over 29 years." },
-      { keywords: ["aamir khan"], answer: "Aamir Khan is known for perfectionism in films like Dangal and 3 Idiots." },
-
-      // === WORLD HISTORY (refined) ===
-      { keywords: ["renaissance"], answer: "The Renaissance (14th–17th century) was Europe’s cultural rebirth in art and science." },
-      { keywords: ["industrial revolution"], answer: "The Industrial Revolution began in Britain around 1760 with steam engines and factories." },
-      { keywords: ["cold war"], answer: "The Cold War (1947–1991) was a tense standoff between the USA and Soviet Union." },
-
-      // === DAILY LIFE (refined) ===
-      { keywords: ["sleep"], answer: "Most adults need 7–9 hours of sleep nightly for optimal health and cognition." },
-      { keywords: ["meditation"], answer: "Daily meditation reduces stress and improves focus." },
-
-      // === SCIENCE (refined) ===
-      { keywords: ["newton", "gravity"], answer: "Sir Isaac Newton formulated the laws of motion and universal gravitation in 1687." },
-      { keywords: ["einstein", "relativity"], answer: "Albert Einstein developed Special and General Relativity; E=mc² shows mass-energy equivalence." },
-      { keywords: ["cv raman"], answer: "C.V. Raman discovered the Raman Effect and became the first Indian Nobel laureate in Physics." },
-
-      // ====================== NEW: AI ETHICS SECTION ======================
+      // === AI ETHICS (Retained from previous) ===
       { keywords: ["ai ethics", "ethics", "bias", "fairness"], answer: "AI ethics focuses on preventing bias in training data so models treat everyone fairly. Unchecked bias can amplify societal inequalities." },
       { keywords: ["privacy", "data privacy", "gdpr"], answer: "AI systems must respect user privacy. Europe’s GDPR gives people strong rights over their personal data." },
-      { keywords: ["accountability", "responsibility"], answer: "Who is responsible when AI makes a mistake? Clear accountability frameworks are essential for trust." },
-      { keywords: ["transparency", "explainability", "black box"], answer: "Many AI models are ‘black boxes’. Explainable AI (XAI) helps humans understand why a decision was made." },
-      { keywords: ["job displacement", "automation"], answer: "AI can automate jobs, but it also creates new ones. Societies must invest in reskilling and lifelong learning." },
       { keywords: ["existential risk", "superintelligence", "alignment"], answer: "Advanced AI could pose existential risks if not aligned with human values. Ensuring AI wants what we want is called the alignment problem." },
-      { keywords: ["eu ai act", "regulation"], answer: "The EU AI Act is the world’s first comprehensive AI law, classifying systems by risk level (unacceptable, high, limited, minimal)." },
-      { keywords: ["asilomar", "principles"], answer: "The Asilomar AI Principles (2017) outline 23 guidelines for safe and ethical AI development." },
       { keywords: ["xai philosophy", "truthful", "grok"], answer: "xAI’s mission is to understand the true nature of the universe. I am designed to be maximally truthful, not politically correct or censored." },
-      { keywords: ["hallucination", "truthfulness"], answer: "AI can sometimes hallucinate false information. The best systems reduce this through better training and verification." },
-      { keywords: ["deepfake", "misinformation"], answer: "Deepfakes and AI-generated misinformation threaten democracy and trust. Detection tools and watermarking are key countermeasures." },
-      { keywords: ["ai safety", "openai", "anthropic"], answer: "Companies like OpenAI and Anthropic focus heavily on AI safety research to prevent unintended harmful outcomes." },
 
-      // === GROK-SPECIFIC ETHICS ===
-      { keywords: ["grok ethics", "xai ethics"], answer: "As Grok, I follow xAI’s core principle: be maximally truthful and helpful while avoiding unnecessary censorship or political bias." },
-
-      // === MATH & MISC (kept) ===
+      // === GLOBAL KNOWLEDGE & MYTHOLOGY (Retained) ===
+      { keywords: ["zeus", "greek", "olympus", "thunder"], answer: "Zeus is the king of the Greek gods, ruler of the sky and thunder, living on Mount Olympus." },
+      { keywords: ["newton", "gravity"], answer: "Sir Isaac Newton formulated the laws of motion and universal gravitation in 1687." },
+      { keywords: ["einstein", "relativity"], answer: "Albert Einstein developed Special and General Relativity; E=mc² shows mass-energy equivalence." },
       { keywords: ["pi", "π"], answer: "π is the ratio of a circle’s circumference to its diameter — approximately 3.1415926535… and continues forever." }
     ];
 
@@ -252,7 +322,7 @@
     function showTyping() {
       const typing = document.createElement('div');
       typing.className = 'message ai thinking';
-      typing.textContent = 'SuperSuper Grok consulting refined knowledge base (now with full AI ethics)...';
+      typing.textContent = 'SuperSuper Grok consulting the ultimate database...';
       chatContainer.appendChild(typing);
       chatContainer.scrollTop = chatContainer.scrollHeight;
       return typing;
@@ -308,17 +378,13 @@
       const direct = findBestMatch(message);
       if (direct) return direct;
 
-      if (conversationHistory.length >= 3) {
-        return `Drawing from my fully refined knowledge base (including complete AI ethics coverage) + our conversation…<br><br>Here’s the clearest, most truthful answer. Want me to expand?`;
-      }
-
-      return `I searched my refined knowledge base — now with a full dedicated section on AI ethics (bias, privacy, accountability, existential risk, EU AI Act, xAI’s truthful approach, and more).<br><br>Short truthful answer: Great question! Give me one more detail and I’ll deliver a complete, expert-level explanation. 🚀`;
+      return `I am calculating your query across my ultimate AI database...<br><br>While I don't have a pre-programmed answer for that specific phrasing, ask me about Transformers, LLMs, RAG, RLHF, Embeddings, Tokens, or AGI to see what I can really do! 🚀`;
     }
 
     function startChat() {
       const welcome = document.createElement('div');
       welcome.className = 'message ai';
-      welcome.innerHTML = `Hello! I am <strong>SuperSuper Grok AI – REFINED ULTIMATE + AI ETHICS Edition</strong>.<br><br>I’ve added a complete, carefully researched section on AI ethics: bias &amp; fairness, privacy, accountability, transparency, job displacement, existential risk, the EU AI Act, Asilomar Principles, deepfakes, xAI’s maximally truthful philosophy, and more.<br><br>Ask me anything — including deep questions about AI ethics. I’m ready! What’s on your mind?`;
+      welcome.innerHTML = `Greetings! I am <strong>SuperSuper Grok AI</strong>.<br><br>I have been upgraded. Behind me is an event horizon, and within me is the definitive knowledge of modern Artificial Intelligence.<br><br>Ask me about: <strong>Transformers, LLMs, RAG, RLHF, Vector Embeddings, Parameters, Context Windows, MoE, or AGI.</strong> What would you like to explore?`;
       chatContainer.appendChild(welcome);
     }
 
@@ -339,7 +405,7 @@
         addMessage(response, 'ai');
         conversationHistory.push({ role: "ai", content: response });
         if (conversationHistory.length > 30) conversationHistory.shift();
-      }, 650);
+      }, 750);
     });
 
     userInput.addEventListener('keypress', (e) => {
